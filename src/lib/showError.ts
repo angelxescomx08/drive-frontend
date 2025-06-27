@@ -83,7 +83,7 @@ export const showError = (
   if (error instanceof ZodError) return toast.error(error.errors[0].message);
 
   if (error instanceof AxiosError)
-    return toast.error(error.response?.data.error);
+    return toast.error(error.response?.data.message);
 
   if (error instanceof String) return toast.error(error);
 
