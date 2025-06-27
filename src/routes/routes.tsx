@@ -1,19 +1,21 @@
-import { Button } from "@/components/ui/button";
-import { createBrowserRouter } from "react-router";
+import { Button } from '@/components/ui/button';
+import { createBrowserRouter } from 'react-router';
 
 export const routes = createBrowserRouter([
   {
-    path: "/",
-    element: <>
-    <Button>Click me</Button>
-    </>,
+    path: '/',
+    element: (
+      <>
+        <Button>Click me</Button>
+      </>
+    ),
   },
   {
-    path: "/about",
+    path: '/about',
     element: <>About</>,
   },
   {
-    path: "/contact",
+    path: '/contact',
     element: <>Contact</>,
   },
 ]);
