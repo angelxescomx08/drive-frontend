@@ -1,16 +1,10 @@
-import ColorPalette from '@/components/ColorPalette';
-import { Button } from '@/components/ui/button';
 import { createBrowserRouter } from 'react-router';
+import { LoginForm } from '../modules/auth/components/forms/LoginForm';
 
 export const routes = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <>
-        <ColorPalette />
-        <Button>Click me</Button>
-      </>
-    ),
+    element: <LoginForm />,
   },
   {
     path: '/about',
