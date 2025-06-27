@@ -9,6 +9,10 @@ export const useLoginMutation = () => {
 
   const form = useForm<Login>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    }
   });
 
   const loginMutation = useMutation({
