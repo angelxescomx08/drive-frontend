@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import type { Path, UseFormReturn } from 'react-hook-form';
 import {
   FormControl,
@@ -8,9 +9,8 @@ import {
   FormMessage,
 } from '../form';
 import { Input } from '../input';
-import type { ComponentProps } from 'react';
 
-type InputFormProps<T extends Record<string, any>> = {
+type InputFormProps<T extends Record<string, unknown>> = {
   form: UseFormReturn<T>;
   name: Path<T>;
   label?: string;
@@ -18,7 +18,7 @@ type InputFormProps<T extends Record<string, any>> = {
   inputProps?: ComponentProps<typeof Input>;
 };
 
-export const InputForm = <T extends Record<string, any>>({
+export const InputForm = <T extends Record<string, unknown>>({
   form,
   name,
   label,
@@ -31,15 +31,18 @@ export const InputForm = <T extends Record<string, any>>({
       name={name}
       render={({ field }) => (
         <FormItem>
-          {!!label && <FormLabel>
-            {label}
-          </FormLabel>}
+          {!!label && <FormLabel>{label}</FormLabel>}
           <FormControl>
-            <Input {...field} {...inputProps} />
+            <Input
+              value={field.value as string}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              name={field.name}
+              ref={field.ref}
+              {...inputProps}
+            />
           </FormControl>
-          {!!description && <FormDescription>
-            {description}
-          </FormDescription>}
+          {!!description && <FormDescription>{description}</FormDescription>}
           <FormMessage />
         </FormItem>
       )}

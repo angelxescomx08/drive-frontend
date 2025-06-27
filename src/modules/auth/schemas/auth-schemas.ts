@@ -13,4 +13,11 @@ export const loginSchema = userSchema
       .min(1, 'La contraseña debe tener al menos 8 caracteres'),
   });
 
+export const registerSchema = loginSchema.extend({
+  repeatPassword: z.string({
+    required_error: 'La contraseña es requerida',
+  }),
+});
+
 export type Login = z.infer<typeof loginSchema>;
+export type Register = z.infer<typeof registerSchema>;

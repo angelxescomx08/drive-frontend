@@ -1,7 +1,7 @@
-import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
-import { showError } from './showError';
 import type { QueryKey } from '@tanstack/react-query';
+import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { showError } from './showError';
 
 declare module '@tanstack/react-query' {
   interface Register {
@@ -22,10 +22,10 @@ export const queryClient = new QueryClient({
     },
     onError: (error, _variables, _context, mutation) => {
       if (mutation.meta?.errorMessage) {
-        showError(mutation.meta.errorMessage);
+        showError(error, mutation.meta.errorMessage);
         return;
       }
-      showError(error);
+      showError(error, 'Ocurrió un error inesperado');
     },
     onSettled: (_data, _error, _variables, _context, mutation) => {
       if (mutation.meta?.invalidatesQuery) {
@@ -36,7 +36,7 @@ export const queryClient = new QueryClient({
     },
   }),
   queryCache: new QueryCache({
-    onError: (error) => {
+    onError: error => {
       showError(error);
     },
   }),

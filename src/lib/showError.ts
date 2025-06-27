@@ -72,7 +72,10 @@ const isValidationErrors = (obj: unknown): obj is ValidationErrors => {
   );
 };
 
-export const showError = (error: unknown) => {
+export const showError = (
+  error: unknown,
+  defaultMessage: string = 'Ocurrió un error inesperado'
+) => {
   if (isValidationErrors(error)) {
     return showValidationErrors(error);
   }
@@ -86,5 +89,5 @@ export const showError = (error: unknown) => {
 
   if (error instanceof Error) return toast.error(error.message);
 
-  return toast.error('Ocurrió un error inesperado');
+  return toast.error(defaultMessage);
 };
