@@ -1,9 +1,18 @@
 import { RouterProvider } from 'react-router';
-import './App.css';
 import { routes } from './routes/routes';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './lib/queryClient';
+import { Toaster } from './components/ui/sonner';
+
+import './App.css';
 
 function App() {
-  return <RouterProvider router={routes} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={routes} />;
+      <Toaster />
+    </QueryClientProvider>
+  );
 }
 
 export default App;
