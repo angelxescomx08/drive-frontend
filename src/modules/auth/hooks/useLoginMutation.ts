@@ -4,8 +4,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { login } from '../actions/auth';
 import { loginSchema, type Login } from '../schemas/auth-schemas';
+import { useAuthStore } from './useAuthStore';
 
 export const useLoginMutation = () => {
+  const { setUser } = useAuthStore();
   const form = useForm<Login>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -15,7 +17,11 @@ export const useLoginMutation = () => {
   });
 
   const loginMutation = useMutation({
-    mutationFn: login,
+    mutationFn: async (data: Login) => {
+      const response = await login(data);
+      setUser(response.user);
+      return response;
+    },
     meta: {
       successMessage: 'Bienvenido',
     },
