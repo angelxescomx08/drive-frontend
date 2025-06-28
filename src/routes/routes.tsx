@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import { LoginForm } from '../modules/auth/components/forms/LoginForm';
 import { RegisterForm } from '../modules/auth/components/forms/RegisterForm';
-import { PrivateProps } from './PrivateProps';
+import { PrivateRoute } from './PrivateRoute';
 import { PublicRoute } from './PublicRoute';
 
 export const routes = createBrowserRouter([
@@ -24,7 +24,7 @@ export const routes = createBrowserRouter([
   {
     path: '/home',
     element: (
-      <PrivateProps>
+      <PrivateRoute>
         <div className='min-h-screen bg-gray-50 p-8'>
           <div className='max-w-4xl mx-auto'>
             <h1 className='text-3xl font-bold text-gray-800 mb-6'>
@@ -37,13 +37,13 @@ export const routes = createBrowserRouter([
             </div>
           </div>
         </div>
-      </PrivateProps>
+      </PrivateRoute>
     ),
   },
   {
     path: '/about',
     element: (
-      <PrivateProps>
+      <PrivateRoute>
         <div className='min-h-screen bg-gray-50 p-8'>
           <div className='max-w-4xl mx-auto'>
             <h1 className='text-3xl font-bold text-gray-800 mb-6'>Acerca de</h1>
@@ -52,13 +52,13 @@ export const routes = createBrowserRouter([
             </div>
           </div>
         </div>
-      </PrivateProps>
+      </PrivateRoute>
     ),
   },
   {
     path: '/contact',
     element: (
-      <PrivateProps>
+      <PrivateRoute>
         <div className='min-h-screen bg-gray-50 p-8'>
           <div className='max-w-4xl mx-auto'>
             <h1 className='text-3xl font-bold text-gray-800 mb-6'>Contacto</h1>
@@ -67,7 +67,7 @@ export const routes = createBrowserRouter([
             </div>
           </div>
         </div>
-      </PrivateProps>
+      </PrivateRoute>
     ),
   },
 ]);

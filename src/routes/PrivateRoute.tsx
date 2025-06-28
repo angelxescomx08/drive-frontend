@@ -11,5 +11,5 @@ export const PrivateRoute = ({ children }: Props) => {
 
   if (!user) return <Navigate to='/' />;
 
-  return <>{children}</>;
+  return children;
 };
