@@ -24,3 +24,13 @@ export async function register(
   const { data } = await api.post<RegisterResponse>('/user', registerData);
   return data;
 }
+
+type GetMeResponse = {
+  message: string;
+  user: User;
+};
+
+export async function getMe(): Promise<User> {
+  const { data } = await api.get<GetMeResponse>('/user/me');
+  return data.user;
+}
