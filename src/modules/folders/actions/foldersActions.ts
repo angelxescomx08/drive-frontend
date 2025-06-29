@@ -11,7 +11,7 @@ type FolderContentResponse = {
 
 export async function getFolderContent(id_folder: string) {
   const { data } = await api.get<FolderContentResponse>(
-    `/folders/content/${id_folder}`
+    `/folder/content/${id_folder}`
   );
   return data;
 }
