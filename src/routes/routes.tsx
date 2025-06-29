@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router';
-import { LoginForm } from '../modules/auth/components/forms/LoginForm';
-import { RegisterForm } from '../modules/auth/components/forms/RegisterForm';
+import { LoginPage } from '../pages/(public)/LoginPage';
+import { RegisterPage } from '../pages/(public)/RegisterPage';
 import { PrivateRoute } from './PrivateRoute';
 import { PublicRoute } from './PublicRoute';
 
@@ -9,7 +9,7 @@ export const routes = createBrowserRouter([
     path: '/',
     element: (
       <PublicRoute>
-        <LoginForm />
+        <LoginPage />
       </PublicRoute>
     ),
   },
@@ -17,7 +17,7 @@ export const routes = createBrowserRouter([
     path: '/register',
     element: (
       <PublicRoute>
-        <RegisterForm />
+        <RegisterPage />
       </PublicRoute>
     ),
   },
