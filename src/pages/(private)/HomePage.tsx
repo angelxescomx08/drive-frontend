@@ -20,9 +20,15 @@ export const HomePage = () => {
           </div>
         ))}
         {folderContent.data.files.map(file => (
-          <div key={file.id_file}>
-            <img src={'/assets/icons/file.png'} alt={file.file_name} />
-            <span>{file.file_name}</span>
+          <div key={file.id_file} className='w-28 cursor-pointer'>
+            <img
+              className='w-28'
+              src={'/assets/icons/file.png'}
+              alt={file.file_name}
+            />
+            <span className='text-2xl line-clamp-1 text-center'>
+              {file.file_name}
+            </span>
           </div>
         ))}
       </div>
