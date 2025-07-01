@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const userSchema = z.object({
-  id: z.string(),
+  id_user: z.string(),
   email: z
     .string({
       required_error: 'El email es requerido',
