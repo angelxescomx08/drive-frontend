@@ -1,15 +1,15 @@
 import { Dropzone } from '../../components/ui/customs/dropzone';
 import { Header } from '../../components/ui/customs/header';
 import { useAuthStore } from '../../modules/auth/hooks/useAuthStore';
+import { useCreateFile } from '../../modules/files/hooks/useCreateFile';
 import { useCreateFolder } from '../../modules/folders/hooks/useCreateFolder';
 import { useFolderContent } from '../../modules/folders/hooks/useFolderContent';
 
 export const HomePage = () => {
   const { folderContent } = useFolderContent('root');
   const { createFolderMutation } = useCreateFolder();
+  const { createFileMutation } = useCreateFile();
   const { user } = useAuthStore();
-
-  console.log(user);
 
   return (
     <>
@@ -17,7 +17,7 @@ export const HomePage = () => {
       <main className='container mx-auto'>
         <div className='flex gap-4 mt-4'>
           <Dropzone
-            onDrop={event => {
+            onDrop={async event => {
               event.preventDefault();
               if (event.dataTransfer && event.dataTransfer.items) {
                 for (let i = 0; i < event.dataTransfer.items.length; i++) {
@@ -29,6 +29,21 @@ export const HomePage = () => {
                         folder_name: entry?.name ?? '',
                         id_parent: null,
                         id_user: user?.id_user ?? '',
+                      });
+                    }
+                    if (entry?.isFile) {
+                      const file = await new Promise<File>(resolve => {
+                        (entry as FileSystemFileEntry).file(file =>
+                          resolve(file)
+                        );
+                      });
+                      console.log({
+                        file,
+                      });
+                      createFileMutation.mutate({
+                        file_name: entry?.name ?? '',
+                        id_folder: null,
+                        file,
                       });
                     }
                   }

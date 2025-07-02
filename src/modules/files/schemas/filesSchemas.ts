@@ -8,9 +8,17 @@ export const fileSchema = z.object({
   aws_key: z.string(),
 });
 
-export const createFileSchema = fileSchema.omit({
-  id_file: true,
-});
+export const createFileSchema = fileSchema
+  .omit({
+    id_file: true,
+    aws_key: true,
+    url: true,
+  })
+  .extend({
+    file: z.instanceof(File, {
+      message: 'El archivo debe ser un archivo válido',
+    }),
+  });
 
 export type FileData = z.infer<typeof fileSchema>;
 export type CreateFile = z.infer<typeof createFileSchema>;
