@@ -39,9 +39,6 @@ export const HomePage = () => {
                             resolve(file)
                           );
                         });
-                        console.log({
-                          file,
-                        });
                         createFileMutation.mutate({
                           file_name: entry?.name ?? '',
                           id_folder: null,
