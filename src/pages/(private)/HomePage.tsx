@@ -2,7 +2,9 @@ import { ContextMenuComponent } from '../../components/ui/customs/context-menu';
 import { Dropzone } from '../../components/ui/customs/dropzone';
 import { Header } from '../../components/ui/customs/header';
 import { useAuthStore } from '../../modules/auth/hooks/useAuthStore';
+import { FileComponent } from '../../modules/files/components/FileComponent';
 import { useCreateFile } from '../../modules/files/hooks/useCreateFile';
+import { FolderComponent } from '../../modules/folders/components/FolderComponent';
 import { useCreateFolder } from '../../modules/folders/hooks/useCreateFolder';
 import { useFolderContent } from '../../modules/folders/hooks/useFolderContent';
 
@@ -51,28 +53,10 @@ export const HomePage = () => {
               }}
             >
               {folderContent.data.folders.map(folder => (
-                <div key={folder.id_folder} className='w-28 cursor-pointer'>
-                  <img
-                    className='w-28'
-                    src={'/assets/icons/folder.png'}
-                    alt={folder.folder_name}
-                  />
-                  <span className='text-2xl line-clamp-1 text-center'>
-                    {folder.folder_name}
-                  </span>
-                </div>
+                <FolderComponent key={folder.id_folder} folder={folder} />
               ))}
               {folderContent.data.files.map(file => (
-                <div key={file.id_file} className='w-28 cursor-pointer'>
-                  <img
-                    className='w-28'
-                    src={'/assets/icons/file.png'}
-                    alt={file.file_name}
-                  />
-                  <span className='text-2xl line-clamp-1 text-center'>
-                    {file.file_name}
-                  </span>
-                </div>
+                <FileComponent key={file.id_file} file={file} />
               ))}
             </Dropzone>
           </div>
