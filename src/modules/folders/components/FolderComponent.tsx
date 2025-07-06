@@ -1,8 +1,13 @@
 import type { Folder } from '../schemas/folderSchemas';
 
-export const FolderComponent = ({ folder }: { folder: Folder }) => {
+type Props = {
+  folder: Folder;
+  onClick: (folder: Folder) => void;
+};
+
+export const FolderComponent = ({ folder, onClick }: Props) => {
   return (
-    <div className='w-28 cursor-pointer'>
+    <div className='w-28 cursor-pointer' onClick={() => onClick(folder)}>
       <img
         className='w-28'
         src={'/assets/icons/folder.png'}

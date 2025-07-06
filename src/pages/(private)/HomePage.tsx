@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { ContextMenuComponent } from '../../components/ui/customs/context-menu';
 import { Dropzone } from '../../components/ui/customs/dropzone';
 import { Header } from '../../components/ui/customs/header';
@@ -9,7 +11,13 @@ import { useCreateFolder } from '../../modules/folders/hooks/useCreateFolder';
 import { useFolderContent } from '../../modules/folders/hooks/useFolderContent';
 
 export const HomePage = () => {
-  const { folderContent } = useFolderContent('root');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const idFolder = searchParams.get('id_folder');
+  const [currentFolder, setCurrentFolder] = useState<string>(
+    idFolder ?? 'root'
+  );
+
+  const { folderContent } = useFolderContent(currentFolder);
   const { createFolderMutation } = useCreateFolder();
   const { createFileMutation } = useCreateFile();
   const { user } = useAuthStore();
@@ -53,7 +61,14 @@ export const HomePage = () => {
               }}
             >
               {folderContent.data.folders.map(folder => (
-                <FolderComponent key={folder.id_folder} folder={folder} />
+                <FolderComponent
+                  key={folder.id_folder}
+                  folder={folder}
+                  onClick={() => {
+                    setCurrentFolder(folder.id_folder);
+                    setSearchParams({ id_folder: folder.id_folder });
+                  }}
+                />
               ))}
               {folderContent.data.files.map(file => (
                 <FileComponent key={file.id_file} file={file} />
