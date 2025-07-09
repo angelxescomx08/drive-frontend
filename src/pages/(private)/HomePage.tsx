@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useSearchParams } from 'react-router';
+import { useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { ContextMenuComponent } from '../../components/ui/customs/context-menu';
 import { Dropzone } from '../../components/ui/customs/dropzone';
 import { Header } from '../../components/ui/customs/header';
@@ -9,6 +9,12 @@ import { useCreateFile } from '../../modules/files/hooks/useCreateFile';
 import { FolderComponent } from '../../modules/folders/components/FolderComponent';
 import { useCreateFolder } from '../../modules/folders/hooks/useCreateFolder';
 import { useFolderContent } from '../../modules/folders/hooks/useFolderContent';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+} from '@/components/ui/breadcrumb';
 
 export const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -51,9 +57,35 @@ export const HomePage = () => {
     }
   };
 
+  const breadcrumbItems = useMemo(() => {
+    const paths = folderContent.data?.paths?.path.split('/');
+    const ids = folderContent.data?.paths?.ids.split('/');
+
+    if (!paths || !ids) {
+      return (
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link to='/home'>Home</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      );
+    }
+
+    return paths.map((path, index) => (
+      <BreadcrumbItem key={ids[index]}>
+        <BreadcrumbLink asChild>
+          <Link to={`/home?id_folder=${ids[index]}`}>{path}</Link>
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+    ));
+  }, [folderContent]);
+
   return (
     <>
       <Header />
+      <Breadcrumb>
+        <BreadcrumbList>{breadcrumbItems}</BreadcrumbList>
+      </Breadcrumb>
       <main className='container mx-auto'>
         <ContextMenuComponent>
           <div className='flex gap-4 mt-4'>

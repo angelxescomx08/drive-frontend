@@ -6,6 +6,10 @@ type FolderContentResponse = {
   message: string;
   folders: Folder[];
   files: FileData[];
+  paths: {
+    path: string;
+    ids: string;
+  } | null;
 };
 
 export async function getFolderContent(id_folder: string) {
