@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 export const loginSchema = userSchema
   .omit({
-    id: true,
+    id_user: true,
   })
   .extend({
     password: z
