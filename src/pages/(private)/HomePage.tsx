@@ -14,7 +14,16 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
 } from '@/components/ui/breadcrumb';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { SlashIcon } from 'lucide-react';
 
 export const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,6 +31,7 @@ export const HomePage = () => {
   const [currentFolder, setCurrentFolder] = useState<string>(
     idFolder ?? 'root'
   );
+  const [open, setOpen] = useState(false);
 
   const { folderContent } = useFolderContent(currentFolder);
   const { createFolderMutation } = useCreateFolder();
@@ -71,14 +81,111 @@ export const HomePage = () => {
       );
     }
 
-    return paths.map((path, index) => (
-      <BreadcrumbItem key={ids[index]}>
-        <BreadcrumbLink asChild>
-          <Link to={`/home?id_folder=${ids[index]}`}>{path}</Link>
-        </BreadcrumbLink>
-      </BreadcrumbItem>
-    ));
-  }, [folderContent]);
+    const ITEMS_TO_DISPLAY = 3;
+    const items = [];
+
+    // Si hay 3 elementos o menos, mostrar todos
+    if (paths.length <= ITEMS_TO_DISPLAY) {
+      for (let index = 0; index < paths.length; index++) {
+        items.push(
+          <BreadcrumbItem key={ids[index]}>
+            <BreadcrumbLink asChild>
+              <Link to={`/home?id_folder=${ids[index]}`}>{paths[index]}</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        );
+
+        if (index < paths.length - 1) {
+          items.push(
+            <BreadcrumbSeparator key={`sep-${index}`}>
+              <SlashIcon />
+            </BreadcrumbSeparator>
+          );
+        }
+      }
+    } else {
+      // Mostrar primer elemento
+      items.push(
+        <BreadcrumbItem key={ids[0]}>
+          <BreadcrumbLink asChild>
+            <Link to={`/home?id_folder=${ids[0]}`}>{paths[0]}</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      );
+
+      items.push(
+        <BreadcrumbSeparator key='sep-0'>
+          <SlashIcon />
+        </BreadcrumbSeparator>
+      );
+
+      // Elementos intermedios con elipsis
+      const middleItems = paths.slice(1, -2);
+      const middleIds = ids.slice(1, -2);
+
+      if (middleItems.length > 0) {
+        items.push(
+          <BreadcrumbItem key='ellipsis'>
+            <DropdownMenu open={open} onOpenChange={setOpen}>
+              <DropdownMenuTrigger
+                className='flex items-center gap-1'
+                aria-label='Toggle menu'
+              >
+                <BreadcrumbEllipsis className='size-4' />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='start'>
+                {middleItems.map((item, index) => (
+                  <DropdownMenuItem key={index}>
+                    <Link
+                      to={`/home?id_folder=${middleIds[index]}`}
+                      onClick={() => {
+                        setCurrentFolder(middleIds[index]);
+                        setSearchParams({ id_folder: middleIds[index] });
+                        setOpen(false);
+                      }}
+                    >
+                      {item}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </BreadcrumbItem>
+        );
+
+        items.push(
+          <BreadcrumbSeparator key='sep-ellipsis'>
+            <SlashIcon />
+          </BreadcrumbSeparator>
+        );
+      }
+
+      // Mostrar últimos elementos
+      const lastItems = paths.slice(-2);
+      const lastIds = ids.slice(-2);
+
+      lastItems.forEach((item, index) => {
+        const actualIndex = paths.length - 2 + index;
+        items.push(
+          <BreadcrumbItem key={lastIds[index]}>
+            <BreadcrumbLink asChild>
+              <Link to={`/home?id_folder=${lastIds[index]}`}>{item}</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        );
+
+        if (index < lastItems.length - 1) {
+          items.push(
+            <BreadcrumbSeparator key={`sep-${actualIndex}`}>
+              <SlashIcon />
+            </BreadcrumbSeparator>
+          );
+        }
+      });
+    }
+
+    return items;
+  }, [folderContent, open, setSearchParams]);
 
   return (
     <>
