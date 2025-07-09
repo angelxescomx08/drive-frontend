@@ -18,12 +18,14 @@ import {
   BreadcrumbEllipsis,
 } from '@/components/ui/breadcrumb';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
 import { SlashIcon } from 'lucide-react';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 export const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,6 +34,7 @@ export const HomePage = () => {
     idFolder ?? 'root'
   );
   const [open, setOpen] = useState(false);
+  const isLargeScreen = useMediaQuery('(min-width: 768px)');
 
   const { folderContent } = useFolderContent(currentFolder);
   const { createFolderMutation } = useCreateFolder();
@@ -81,11 +84,9 @@ export const HomePage = () => {
       );
     }
 
-    const ITEMS_TO_DISPLAY = 3;
     const items = [];
 
-    // Si hay 3 elementos o menos, mostrar todos
-    if (paths.length <= ITEMS_TO_DISPLAY) {
+    if (isLargeScreen || paths.length <= 3) {
       for (let index = 0; index < paths.length; index++) {
         items.push(
           <BreadcrumbItem key={ids[index]}>
@@ -104,7 +105,7 @@ export const HomePage = () => {
         }
       }
     } else {
-      // Mostrar primer elemento
+      // Primer elemento
       items.push(
         <BreadcrumbItem key={ids[0]}>
           <BreadcrumbLink asChild>
@@ -119,25 +120,32 @@ export const HomePage = () => {
         </BreadcrumbSeparator>
       );
 
-      // Elementos intermedios con elipsis
-      const middleItems = paths.slice(1, -2);
-      const middleIds = ids.slice(1, -2);
+      // Drawer con middle items
+      const middleItems = paths.slice(1, -1);
+      const middleIds = ids.slice(1, -1);
 
       if (middleItems.length > 0) {
         items.push(
-          <BreadcrumbItem key='ellipsis'>
-            <DropdownMenu open={open} onOpenChange={setOpen}>
-              <DropdownMenuTrigger
-                className='flex items-center gap-1'
-                aria-label='Toggle menu'
-              >
-                <BreadcrumbEllipsis className='size-4' />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align='start'>
-                {middleItems.map((item, index) => (
-                  <DropdownMenuItem key={index}>
+          <BreadcrumbItem key='drawer'>
+            <Drawer open={open} onOpenChange={setOpen}>
+              <DrawerTrigger asChild>
+                <button
+                  className='flex items-center gap-1'
+                  aria-label='Toggle drawer'
+                >
+                  <BreadcrumbEllipsis className='size-4' />
+                </button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>Carpetas intermedias</DrawerTitle>
+                </DrawerHeader>
+                <div className='flex flex-col gap-2 p-4'>
+                  {middleItems.map((item, index) => (
                     <Link
+                      key={middleIds[index]}
                       to={`/home?id_folder=${middleIds[index]}`}
+                      className='text-sm font-medium hover:underline'
                       onClick={() => {
                         setCurrentFolder(middleIds[index]);
                         setSearchParams({ id_folder: middleIds[index] });
@@ -146,46 +154,35 @@ export const HomePage = () => {
                     >
                       {item}
                     </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  ))}
+                </div>
+              </DrawerContent>
+            </Drawer>
           </BreadcrumbItem>
         );
 
         items.push(
-          <BreadcrumbSeparator key='sep-ellipsis'>
+          <BreadcrumbSeparator key='sep-drawer'>
             <SlashIcon />
           </BreadcrumbSeparator>
         );
       }
 
-      // Mostrar últimos elementos
-      const lastItems = paths.slice(-2);
-      const lastIds = ids.slice(-2);
-
-      lastItems.forEach((item, index) => {
-        const actualIndex = paths.length - 2 + index;
-        items.push(
-          <BreadcrumbItem key={lastIds[index]}>
-            <BreadcrumbLink asChild>
-              <Link to={`/home?id_folder=${lastIds[index]}`}>{item}</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        );
-
-        if (index < lastItems.length - 1) {
-          items.push(
-            <BreadcrumbSeparator key={`sep-${actualIndex}`}>
-              <SlashIcon />
-            </BreadcrumbSeparator>
-          );
-        }
-      });
+      // Último elemento
+      const lastIndex = paths.length - 1;
+      items.push(
+        <BreadcrumbItem key={ids[lastIndex]}>
+          <BreadcrumbLink asChild>
+            <Link to={`/home?id_folder=${ids[lastIndex]}`}>
+              {paths[lastIndex]}
+            </Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      );
     }
 
     return items;
-  }, [folderContent, open, setSearchParams]);
+  }, [folderContent, open, setSearchParams, isLargeScreen, setCurrentFolder]);
 
   return (
     <>
