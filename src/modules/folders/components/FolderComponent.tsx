@@ -1,15 +1,24 @@
+import { cn } from '../../../lib/utils';
 import type { Folder } from '../schemas/folderSchemas';
 
 type Props = {
   folder: Folder;
+  isSelected: boolean;
   onClick: (folder: Folder) => void;
   onDoubleClick: (folder: Folder) => void;
 };
 
-export const FolderComponent = ({ folder, onClick, onDoubleClick }: Props) => {
+export const FolderComponent = ({
+  folder,
+  isSelected,
+  onClick,
+  onDoubleClick,
+}: Props) => {
   return (
     <div
-      className='w-28 cursor-pointer'
+      className={cn(`w-28 cursor-pointer`, {
+        'bg-blue-500': isSelected,
+      })}
       onClick={() => onClick(folder)}
       onDoubleClick={() => onDoubleClick(folder)}
     >
@@ -18,7 +27,11 @@ export const FolderComponent = ({ folder, onClick, onDoubleClick }: Props) => {
         src={'/assets/icons/folder.png'}
         alt={folder.folder_name}
       />
-      <span className='text-lg line-clamp-1 text-center'>
+      <span
+        className={cn('text-lg line-clamp-1 text-center', {
+          'text-white': isSelected,
+        })}
+      >
         {folder.folder_name}
       </span>
     </div>

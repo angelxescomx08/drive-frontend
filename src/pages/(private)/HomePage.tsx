@@ -14,6 +14,12 @@ import { useFolderContent } from '../../modules/folders/hooks/useFolderContent';
 
 export const HomePage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedItem, setSelectedItem] = useState<
+    {
+      type: 'folder' | 'file';
+      id: string;
+    }[]
+  >([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const idFolder = searchParams.get('id_folder');
   const [currentFolder, setCurrentFolder] = useState<string>(
@@ -96,12 +102,19 @@ export const HomePage = () => {
                 <FolderComponent
                   key={folder.id_folder}
                   folder={folder}
+                  isSelected={selectedItem.some(
+                    item =>
+                      item.type === 'folder' && item.id === folder.id_folder
+                  )}
                   onDoubleClick={() => {
                     setCurrentFolder(folder.id_folder);
                     setSearchParams({ id_folder: folder.id_folder });
                   }}
                   onClick={() => {
-                    console.log('clicked');
+                    setSelectedItem(prev => [
+                      ...prev,
+                      { type: 'folder', id: folder.id_folder },
+                    ]);
                   }}
                 />
               ))}
@@ -109,8 +122,14 @@ export const HomePage = () => {
                 <FileComponent
                   key={file.id_file}
                   file={file}
+                  isSelected={selectedItem.some(
+                    item => item.type === 'file' && item.id === file.id_file
+                  )}
                   onClick={() => {
-                    console.log('clicked');
+                    setSelectedItem(prev => [
+                      ...prev,
+                      { type: 'file', id: file.id_file },
+                    ]);
                   }}
                   onDoubleClick={() => {
                     console.log('double clicked');
