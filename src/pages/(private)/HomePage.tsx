@@ -95,6 +95,9 @@ export const HomePage = () => {
           onUploadFile={() => {
             fileInputRef.current?.click();
           }}
+          onDelete={() => {
+            console.log('delete');
+          }}
         >
           <div className='flex gap-4 mt-4'>
             <Dropzone onDrop={handleDrop}>

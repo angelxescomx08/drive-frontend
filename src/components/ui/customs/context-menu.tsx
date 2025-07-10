@@ -13,7 +13,7 @@ type Props = {
   onNewFolder?: () => void;
   onUploadFile?: () => void;
   onDownloadFile?: () => void;
-  onDeleteFile?: () => void;
+  onDelete?: () => void;
 };
 
 export function ContextMenuComponent({
@@ -21,7 +21,7 @@ export function ContextMenuComponent({
   onNewFolder,
   onUploadFile,
   onDownloadFile,
-  onDeleteFile,
+  onDelete,
 }: Props) {
   return (
     <ContextMenu>
@@ -45,7 +45,7 @@ export function ContextMenuComponent({
             <Download />
           </ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuItem inset onClick={onDeleteFile}>
+        <ContextMenuItem inset onClick={onDelete}>
           Eliminar
           <ContextMenuShortcut>
             <Trash />
