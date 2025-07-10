@@ -52,8 +52,6 @@ export const HomePage = () => {
     }
   };
 
-  console.log(folderContent.data.paths);
-
   return (
     <>
       <Header />

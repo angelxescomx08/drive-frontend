@@ -49,7 +49,11 @@ export const BreadcrumbComponent = ({
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href='/home' asChild>
-              <Button variant='ghost' onClick={() => onClick(ids[0], paths[0])}>
+              <Button
+                variant='ghost'
+                className='text-2xl'
+                onClick={() => onClick(ids[0], paths[0])}
+              >
                 {paths[0]}
               </Button>
             </BreadcrumbLink>
@@ -64,7 +68,11 @@ export const BreadcrumbComponent = ({
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href='/home' asChild>
-            <Button variant='ghost' onClick={() => onClick(ids[0], paths[0])}>
+            <Button
+              variant='ghost'
+              className='text-2xl'
+              onClick={() => onClick(ids[0], paths[0])}
+            >
               {paths[0]}
             </Button>
           </BreadcrumbLink>
@@ -85,6 +93,7 @@ export const BreadcrumbComponent = ({
                     {paths.slice(1, paths.length - 1).map((path, index) => (
                       <DropdownMenuItem key={index}>
                         <Button
+                          className='text-2xl'
                           onClick={() => onClick(ids[index + 1], path)}
                           variant='ghost'
                         >
@@ -107,12 +116,12 @@ export const BreadcrumbComponent = ({
                       </DrawerDescription>
                     </DrawerHeader>
                     <div className='grid gap-1 px-4'>
-                      {paths.slice(1, -2).map((path, index) => (
+                      {paths.slice(1, paths.length - 1).map((path, index) => (
                         <Button
                           key={index}
                           onClick={() => onClick(ids[index + 1], path)}
                           variant='ghost'
-                          className='py-1 text-sm'
+                          className='py-1 text-lg'
                         >
                           {path}
                         </Button>
@@ -142,6 +151,7 @@ export const BreadcrumbComponent = ({
                     <Button
                       onClick={() => onClick(ids[index + 1], item)}
                       variant='ghost'
+                      className='text-2xl'
                     >
                       {item}
                     </Button>
