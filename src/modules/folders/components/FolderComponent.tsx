@@ -13,7 +13,7 @@ export const FolderComponent = ({ folder, onClick }: Props) => {
         src={'/assets/icons/folder.png'}
         alt={folder.folder_name}
       />
-      <span className='text-2xl line-clamp-1 text-center'>
+      <span className='text-lg line-clamp-1 text-center'>
         {folder.folder_name}
       </span>
     </div>
