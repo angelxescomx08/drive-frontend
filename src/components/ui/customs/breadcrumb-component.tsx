@@ -121,7 +121,7 @@ export const BreadcrumbComponent = ({
             <BreadcrumbSeparator />
           </>
         ) : null}
-        {paths.slice(-itemsToDisplay + 1).map((item, index) => (
+        {paths.slice(1).map((item, index) => (
           <Fragment key={index}>
             <BreadcrumbItem>
               {item ? (
