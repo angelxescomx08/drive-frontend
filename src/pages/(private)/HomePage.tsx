@@ -1,17 +1,19 @@
-import { useState } from 'react';
+import { BreadcrumbComponent } from '@/components/ui/customs/breadcrumb-component';
+import { useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { ContextMenuComponent } from '../../components/ui/customs/context-menu';
 import { Dropzone } from '../../components/ui/customs/dropzone';
 import { Header } from '../../components/ui/customs/header';
+import { Input } from '../../components/ui/input';
 import { useAuthStore } from '../../modules/auth/hooks/useAuthStore';
 import { FileComponent } from '../../modules/files/components/FileComponent';
 import { useCreateFile } from '../../modules/files/hooks/useCreateFile';
 import { FolderComponent } from '../../modules/folders/components/FolderComponent';
 import { useCreateFolder } from '../../modules/folders/hooks/useCreateFolder';
 import { useFolderContent } from '../../modules/folders/hooks/useFolderContent';
-import { BreadcrumbComponent } from '@/components/ui/customs/breadcrumb-component';
 
 export const HomePage = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const idFolder = searchParams.get('id_folder');
   const [currentFolder, setCurrentFolder] = useState<string>(
@@ -52,6 +54,17 @@ export const HomePage = () => {
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      createFileMutation.mutate({
+        file_name: file.name,
+        id_folder: currentFolder === 'root' ? 'null' : currentFolder,
+        file,
+      });
+    }
+  };
+
   return (
     <>
       <Header />
@@ -66,7 +79,17 @@ export const HomePage = () => {
       />
 
       <main className='container mx-auto'>
-        <ContextMenuComponent>
+        <Input
+          className='hidden'
+          type='file'
+          ref={fileInputRef}
+          onChange={handleFileChange}
+        />
+        <ContextMenuComponent
+          onUploadFile={() => {
+            fileInputRef.current?.click();
+          }}
+        >
           <div className='flex gap-4 mt-4'>
             <Dropzone onDrop={handleDrop}>
               {folderContent.data.folders.map(folder => (
