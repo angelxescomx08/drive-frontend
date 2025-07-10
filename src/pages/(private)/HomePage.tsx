@@ -111,10 +111,25 @@ export const HomePage = () => {
                     setSearchParams({ id_folder: folder.id_folder });
                   }}
                   onClick={() => {
-                    setSelectedItem(prev => [
-                      ...prev,
-                      { type: 'folder', id: folder.id_folder },
-                    ]);
+                    setSelectedItem(prev => {
+                      const exists = prev.some(
+                        item =>
+                          item.type === 'folder' && item.id === folder.id_folder
+                      );
+                      if (exists) {
+                        return prev.filter(
+                          item =>
+                            !(
+                              item.type === 'folder' &&
+                              item.id === folder.id_folder
+                            )
+                        );
+                      }
+                      return [
+                        ...prev,
+                        { type: 'folder', id: folder.id_folder },
+                      ];
+                    });
                   }}
                 />
               ))}
@@ -126,10 +141,18 @@ export const HomePage = () => {
                     item => item.type === 'file' && item.id === file.id_file
                   )}
                   onClick={() => {
-                    setSelectedItem(prev => [
-                      ...prev,
-                      { type: 'file', id: file.id_file },
-                    ]);
+                    setSelectedItem(prev => {
+                      const exists = prev.some(
+                        item => item.type === 'file' && item.id === file.id_file
+                      );
+                      if (exists) {
+                        return prev.filter(
+                          item =>
+                            !(item.type === 'file' && item.id === file.id_file)
+                        );
+                      }
+                      return [...prev, { type: 'file', id: file.id_file }];
+                    });
                   }}
                   onDoubleClick={() => {
                     console.log('double clicked');
