@@ -52,16 +52,18 @@ export const HomePage = () => {
     }
   };
 
+  console.log(folderContent.data.paths);
+
   return (
     <>
       <Header />
       <BreadcrumbComponent
-        paths={folderContent.data.paths?.path.split('/') ?? []}
-        ids={folderContent.data.paths?.ids.split('/') ?? []}
+        paths={folderContent.data.paths?.path.split('/').filter(Boolean) ?? []}
+        ids={folderContent.data.paths?.ids.split('/').filter(Boolean) ?? []}
         itemsToDisplay={3}
         onClick={(id, _path) => {
-          setCurrentFolder(id);
-          setSearchParams({ id_folder: id });
+          setCurrentFolder(id ?? 'root');
+          setSearchParams({ id_folder: id ?? 'root' });
         }}
       />
 

@@ -7,7 +7,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,14 +43,19 @@ export const BreadcrumbComponent = ({
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
-  if (paths.length === 0 && ids.length === 0) return null;
+  // if (paths.length === 0 && ids.length === 0) return null;
+
+  console.log({
+    paths,
+    ids,
+  });
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href='/home' asChild>
-            <Button onClick={() => onClick(ids[0], paths[0])}>
+            <Button variant='ghost' onClick={() => onClick(ids[0], paths[0])}>
               {paths[0]}
             </Button>
           </BreadcrumbLink>
@@ -117,28 +122,30 @@ export const BreadcrumbComponent = ({
           </>
         ) : null}
         {paths.slice(-itemsToDisplay + 1).map((item, index) => (
-          <BreadcrumbItem key={index}>
-            {item ? (
-              <>
-                <BreadcrumbLink
-                  asChild
-                  className='max-w-20 truncate md:max-w-none'
-                >
-                  <Button
-                    onClick={() => onClick(ids[index + 1], item)}
-                    variant='ghost'
+          <Fragment key={index}>
+            <BreadcrumbItem>
+              {item ? (
+                <>
+                  <BreadcrumbLink
+                    asChild
+                    className='max-w-20 truncate md:max-w-none'
                   >
-                    {item}
-                  </Button>
-                </BreadcrumbLink>
-                <BreadcrumbSeparator />
-              </>
-            ) : (
-              <BreadcrumbPage className='max-w-20 truncate md:max-w-none'>
-                {item}
-              </BreadcrumbPage>
-            )}
-          </BreadcrumbItem>
+                    <Button
+                      onClick={() => onClick(ids[index + 1], item)}
+                      variant='ghost'
+                    >
+                      {item}
+                    </Button>
+                  </BreadcrumbLink>
+                </>
+              ) : (
+                <BreadcrumbPage className='max-w-20 truncate md:max-w-none'>
+                  {item}
+                </BreadcrumbPage>
+              )}
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+          </Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>
