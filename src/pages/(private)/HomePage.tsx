@@ -33,7 +33,7 @@ export const HomePage = () => {
           if (entry?.isDirectory) {
             createFolderMutation.mutate({
               folder_name: entry?.name ?? '',
-              id_parent: currentFolder,
+              id_parent: currentFolder === 'root' ? 'null' : currentFolder,
               id_user: user?.id_user ?? '',
             });
           }
@@ -43,7 +43,7 @@ export const HomePage = () => {
             });
             createFileMutation.mutate({
               file_name: entry?.name ?? '',
-              id_folder: currentFolder,
+              id_folder: currentFolder === 'root' ? 'null' : currentFolder,
               file,
             });
           }

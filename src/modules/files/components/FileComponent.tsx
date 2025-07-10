@@ -8,10 +8,7 @@ export const FileComponent = ({ file }: { file: FileData }) => {
         src={'/assets/icons/file.png'}
         alt={file.file_name}
       />
-      <span className='text-lg line-clamp-1 text-center'>
-        {file.file_name} Lorem ipsum dolor sit amet consectetur adipisicing
-        elit. Quisquam, quos.
-      </span>
+      <span className='text-lg line-clamp-1 text-center'>{file.file_name}</span>
     </div>
   );
 };
