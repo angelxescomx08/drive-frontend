@@ -59,6 +59,10 @@ export const HomePage = () => {
         paths={folderContent.data.paths?.path.split('/') ?? []}
         ids={folderContent.data.paths?.ids.split('/') ?? []}
         itemsToDisplay={3}
+        onClick={(id, _path) => {
+          setCurrentFolder(id);
+          setSearchParams({ id_folder: id });
+        }}
       />
 
       <main className='container mx-auto'>

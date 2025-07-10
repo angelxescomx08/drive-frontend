@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/breadcrumb';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { useState } from 'react';
-import { Link } from 'react-router';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,9 +31,15 @@ type Props = {
   paths: string[];
   ids: string[];
   itemsToDisplay: number;
+  onClick: (id: string, path: string) => void;
 };
 
-export const BreadcrumbComponent = ({ paths, ids, itemsToDisplay }: Props) => {
+export const BreadcrumbComponent = ({
+  paths,
+  ids,
+  itemsToDisplay,
+  onClick,
+}: Props) => {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
@@ -45,7 +50,9 @@ export const BreadcrumbComponent = ({ paths, ids, itemsToDisplay }: Props) => {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href='/home' asChild>
-            <Link to={`/home?id_folder=${ids[0]}`}>{paths[0]}</Link>
+            <Button onClick={() => onClick(ids[0], paths[0])}>
+              {paths[0]}
+            </Button>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
@@ -63,9 +70,12 @@ export const BreadcrumbComponent = ({ paths, ids, itemsToDisplay }: Props) => {
                   <DropdownMenuContent align='start'>
                     {paths.slice(1, paths.length - 1).map((path, index) => (
                       <DropdownMenuItem key={index}>
-                        <Link to={`/home?id_folder=${ids[index + 1]}`}>
+                        <Button
+                          onClick={() => onClick(ids[index + 1], path)}
+                          variant='ghost'
+                        >
                           {path}
-                        </Link>
+                        </Button>
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
@@ -84,13 +94,14 @@ export const BreadcrumbComponent = ({ paths, ids, itemsToDisplay }: Props) => {
                     </DrawerHeader>
                     <div className='grid gap-1 px-4'>
                       {paths.slice(1, -2).map((path, index) => (
-                        <Link
+                        <Button
                           key={index}
-                          to={`/home?id_folder=${ids[index + 1]}`}
+                          onClick={() => onClick(ids[index + 1], path)}
+                          variant='ghost'
                           className='py-1 text-sm'
                         >
                           {path}
-                        </Link>
+                        </Button>
                       ))}
                     </div>
                     <DrawerFooter className='pt-4'>
@@ -113,7 +124,12 @@ export const BreadcrumbComponent = ({ paths, ids, itemsToDisplay }: Props) => {
                   asChild
                   className='max-w-20 truncate md:max-w-none'
                 >
-                  <Link to={`/home?id_folder=${ids[index + 1]}`}>{item}</Link>
+                  <Button
+                    onClick={() => onClick(ids[index + 1], item)}
+                    variant='ghost'
+                  >
+                    {item}
+                  </Button>
                 </BreadcrumbLink>
                 <BreadcrumbSeparator />
               </>
