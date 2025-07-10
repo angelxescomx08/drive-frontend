@@ -1,8 +1,18 @@
 import type { FileData } from '../schemas/filesSchemas';
 
-export const FileComponent = ({ file }: { file: FileData }) => {
+type Props = {
+  file: FileData;
+  onClick: (file: FileData) => void;
+  onDoubleClick: (file: FileData) => void;
+};
+
+export const FileComponent = ({ file, onClick, onDoubleClick }: Props) => {
   return (
-    <div className='w-28 cursor-pointer'>
+    <div
+      className='w-28 cursor-pointer'
+      onClick={() => onClick(file)}
+      onDoubleClick={() => onDoubleClick(file)}
+    >
       <img
         className='w-28'
         src={'/assets/icons/file.png'}

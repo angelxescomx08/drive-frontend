@@ -96,14 +96,26 @@ export const HomePage = () => {
                 <FolderComponent
                   key={folder.id_folder}
                   folder={folder}
-                  onClick={() => {
+                  onDoubleClick={() => {
                     setCurrentFolder(folder.id_folder);
                     setSearchParams({ id_folder: folder.id_folder });
+                  }}
+                  onClick={() => {
+                    console.log('clicked');
                   }}
                 />
               ))}
               {folderContent.data.files.map(file => (
-                <FileComponent key={file.id_file} file={file} />
+                <FileComponent
+                  key={file.id_file}
+                  file={file}
+                  onClick={() => {
+                    console.log('clicked');
+                  }}
+                  onDoubleClick={() => {
+                    console.log('double clicked');
+                  }}
+                />
               ))}
             </Dropzone>
           </div>
