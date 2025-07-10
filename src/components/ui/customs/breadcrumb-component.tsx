@@ -43,12 +43,21 @@ export const BreadcrumbComponent = ({
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
-  // if (paths.length === 0 && ids.length === 0) return null;
-
-  console.log({
-    paths,
-    ids,
-  });
+  if (paths.length === 1 && ids.length === 1)
+    return (
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href='/home' asChild>
+              <Button variant='ghost' onClick={() => onClick(ids[0], paths[0])}>
+                {paths[0]}
+              </Button>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+        </BreadcrumbList>
+      </Breadcrumb>
+    );
 
   return (
     <Breadcrumb>
@@ -121,7 +130,7 @@ export const BreadcrumbComponent = ({
             <BreadcrumbSeparator />
           </>
         ) : null}
-        {paths.slice(1).map((item, index) => (
+        {paths.slice(-1).map((item, index) => (
           <Fragment key={index}>
             <BreadcrumbItem>
               {item ? (
