@@ -70,7 +70,7 @@ export const BreadcrumbComponent = ({
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
-        {paths.length > itemsToDisplay ? (
+        {paths.length >= itemsToDisplay ? (
           <>
             <BreadcrumbItem>
               {isDesktop ? (
