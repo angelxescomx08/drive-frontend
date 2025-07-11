@@ -11,3 +11,8 @@ export async function createFile(file: CreateFile) {
   const { data } = await api.post('/file', formData);
   return data;
 }
+
+export async function deleteFile(id_file: string) {
+  const { data } = await api.delete(`/file/${id_file}`);
+  return data;
+}

@@ -8,13 +8,15 @@ import { Input } from '../../components/ui/input';
 import { useAuthStore } from '../../modules/auth/hooks/useAuthStore';
 import { FileComponent } from '../../modules/files/components/FileComponent';
 import { useCreateFile } from '../../modules/files/hooks/useCreateFile';
+import { useDeleteFile } from '../../modules/files/hooks/useDeleteFile';
 import { FolderComponent } from '../../modules/folders/components/FolderComponent';
 import { useCreateFolder } from '../../modules/folders/hooks/useCreateFolder';
+import { useDeleteFolder } from '../../modules/folders/hooks/useDeleteFolder';
 import { useFolderContent } from '../../modules/folders/hooks/useFolderContent';
 
 export const HomePage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [selectedItem, setSelectedItem] = useState<
+  const [selectedItems, setSelectedItems] = useState<
     {
       type: 'folder' | 'file';
       id: string;
@@ -27,6 +29,8 @@ export const HomePage = () => {
   );
 
   const { folderContent } = useFolderContent(currentFolder);
+  const { deleteFolderMutation } = useDeleteFolder();
+  const { deleteFileMutation } = useDeleteFile();
   const { createFolderMutation } = useCreateFolder();
   const { createFileMutation } = useCreateFile();
   const { user } = useAuthStore();
@@ -95,8 +99,18 @@ export const HomePage = () => {
           onUploadFile={() => {
             fileInputRef.current?.click();
           }}
-          onDelete={() => {
-            console.log('delete');
+          onDelete={async () => {
+            await Promise.all(
+              selectedItems.map(item => {
+                if (item.type === 'folder') {
+                  return deleteFolderMutation.mutateAsync(item.id);
+                }
+                if (item.type === 'file') {
+                  return deleteFileMutation.mutateAsync(item.id);
+                }
+              })
+            );
+            setSelectedItems([]);
           }}
         >
           <div className='flex gap-4 mt-4'>
@@ -105,7 +119,7 @@ export const HomePage = () => {
                 <FolderComponent
                   key={folder.id_folder}
                   folder={folder}
-                  isSelected={selectedItem.some(
+                  isSelected={selectedItems.some(
                     item =>
                       item.type === 'folder' && item.id === folder.id_folder
                   )}
@@ -114,7 +128,7 @@ export const HomePage = () => {
                     setSearchParams({ id_folder: folder.id_folder });
                   }}
                   onClick={() => {
-                    setSelectedItem(prev => {
+                    setSelectedItems(prev => {
                       const exists = prev.some(
                         item =>
                           item.type === 'folder' && item.id === folder.id_folder
@@ -140,11 +154,11 @@ export const HomePage = () => {
                 <FileComponent
                   key={file.id_file}
                   file={file}
-                  isSelected={selectedItem.some(
+                  isSelected={selectedItems.some(
                     item => item.type === 'file' && item.id === file.id_file
                   )}
                   onClick={() => {
-                    setSelectedItem(prev => {
+                    setSelectedItems(prev => {
                       const exists = prev.some(
                         item => item.type === 'file' && item.id === file.id_file
                       );
