@@ -12,7 +12,12 @@ import {
 import { Input } from '../input';
 
 export function Header() {
-  const { user } = useAuthStore();
+  const { user, setUser } = useAuthStore();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
 
   return (
     <header className='flex justify-between items-center border-b border-gray-200 shadow-lg p-4'>
@@ -52,8 +57,7 @@ export function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuSeparator />
-            <DropdownMenuItem variant='destructive'>
+            <DropdownMenuItem variant='destructive' onClick={handleLogout}>
               <LogOut className='mr-2 h-4 w-4' />
               <span>Cerrar sesión</span>
             </DropdownMenuItem>
