@@ -92,6 +92,7 @@ export const HomePage = () => {
     <>
       <Header
         onSearch={value => {
+          setSelectedItems([]);
           setSearch(value);
         }}
       />
