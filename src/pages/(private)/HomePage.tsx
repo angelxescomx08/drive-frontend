@@ -9,10 +9,27 @@ import { useAuthStore } from '../../modules/auth/hooks/useAuthStore';
 import { FileComponent } from '../../modules/files/components/FileComponent';
 import { useCreateFile } from '../../modules/files/hooks/useCreateFile';
 import { useDeleteFile } from '../../modules/files/hooks/useDeleteFile';
+import type { FileData } from '../../modules/files/schemas/filesSchemas';
 import { FolderComponent } from '../../modules/folders/components/FolderComponent';
 import { useCreateFolder } from '../../modules/folders/hooks/useCreateFolder';
 import { useDeleteFolder } from '../../modules/folders/hooks/useDeleteFolder';
 import { useFolderContent } from '../../modules/folders/hooks/useFolderContent';
+
+const downloadFile = async (file: FileData) => {
+  const response = await fetch(file.url);
+  const blob = await response.blob();
+
+  const blobUrl = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = blobUrl;
+  link.download = file.file_name;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(blobUrl); // Limpieza
+};
 
 export const HomePage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -128,6 +145,19 @@ export const HomePage = () => {
                 }
               })
             );
+            setSelectedItems([]);
+          }}
+          onDownloadFile={() => {
+            selectedItems.forEach(item => {
+              if (item.type === 'file') {
+                const file = folderContent.data.files.find(
+                  file => file.id_file === item.id
+                );
+                if (file) {
+                  downloadFile(file);
+                }
+              }
+            });
             setSelectedItems([]);
           }}
         >
