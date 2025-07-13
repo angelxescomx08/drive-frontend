@@ -1,5 +1,5 @@
 import { BreadcrumbComponent } from '@/components/ui/customs/breadcrumb-component';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { ContextMenuComponent } from '../../components/ui/customs/context-menu';
 import { Dropzone } from '../../components/ui/customs/dropzone';
@@ -27,6 +27,7 @@ export const HomePage = () => {
   const [currentFolder, setCurrentFolder] = useState<string>(
     idFolder ?? 'root'
   );
+  const [search, setSearch] = useState<string>('');
 
   const { folderContent } = useFolderContent(currentFolder);
   const { deleteFolderMutation } = useDeleteFolder();
@@ -75,9 +76,25 @@ export const HomePage = () => {
     }
   };
 
+  const folders = useMemo(() => {
+    return folderContent.data.folders.filter(folder =>
+      folder.folder_name.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [folderContent.data.folders, search]);
+
+  const files = useMemo(() => {
+    return folderContent.data.files.filter(file =>
+      file.file_name.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [folderContent.data.files, search]);
+
   return (
     <>
-      <Header />
+      <Header
+        onSearch={value => {
+          setSearch(value);
+        }}
+      />
       <BreadcrumbComponent
         paths={folderContent.data.paths?.path.split('/').filter(Boolean) ?? []}
         ids={folderContent.data.paths?.ids.split('/').filter(Boolean) ?? []}
@@ -115,7 +132,7 @@ export const HomePage = () => {
         >
           <div className='flex gap-4 mt-4'>
             <Dropzone onDrop={handleDrop}>
-              {folderContent.data.folders.map(folder => (
+              {folders.map(folder => (
                 <FolderComponent
                   key={folder.id_folder}
                   folder={folder}
@@ -150,7 +167,7 @@ export const HomePage = () => {
                   }}
                 />
               ))}
-              {folderContent.data.files.map(file => (
+              {files.map(file => (
                 <FileComponent
                   key={file.id_file}
                   file={file}

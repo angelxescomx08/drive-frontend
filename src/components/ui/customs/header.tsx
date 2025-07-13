@@ -11,7 +11,11 @@ import {
 } from '../dropdown-menu';
 import { Input } from '../input';
 
-export function Header() {
+type Props = {
+  onSearch: (search: string) => void;
+};
+
+export function Header({ onSearch }: Props) {
   const { user, setUser } = useAuthStore();
 
   const handleLogout = () => {
@@ -33,6 +37,7 @@ export function Header() {
             type='text'
             placeholder='Buscar archivos y carpetas...'
             className='pl-10 pr-4 w-full'
+            onChange={e => onSearch(e.target.value)}
           />
         </div>
       </div>
