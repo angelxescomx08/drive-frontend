@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { cn } from '../../../lib/utils';
 import type { FileData } from '../schemas/filesSchemas';
 
@@ -14,6 +15,34 @@ export const FileComponent = ({
   onClick,
   onDoubleClick,
 }: Props) => {
+  const icon = useMemo(() => {
+    if (
+      ['.png', '.jpg', '.jpeg', '.gif', '.svg'].includes(
+        `.${file.file_name.toLocaleLowerCase().split('.').pop() || ''}`
+      )
+    ) {
+      return '/assets/icons/img.png';
+    }
+
+    if (
+      ['.pdf'].includes(
+        `.${file.file_name.toLocaleLowerCase().split('.').pop() || ''}`
+      )
+    ) {
+      return '/assets/icons/pdf.png';
+    }
+
+    if (
+      ['.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx'].includes(
+        `.${file.file_name.toLocaleLowerCase().split('.').pop() || ''}`
+      )
+    ) {
+      return '/assets/icons/doc.png';
+    }
+
+    return '/assets/icons/file.png';
+  }, [file]);
+
   return (
     <div
       className={cn(`w-28 cursor-pointer`, {
@@ -22,11 +51,7 @@ export const FileComponent = ({
       onClick={() => onClick(file)}
       onDoubleClick={() => onDoubleClick(file)}
     >
-      <img
-        className='w-28'
-        src={'/assets/icons/file.png'}
-        alt={file.file_name}
-      />
+      <img className='w-28' src={icon} alt={file.file_name} />
       <span
         className={cn('text-lg line-clamp-1 text-center', {
           'text-white': isSelected,
